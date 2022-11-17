@@ -83,9 +83,17 @@ export class MarcadoresComponent implements AfterViewInit {
       color,
       marker: nuevoMarcador
     });
+    
+    //Evento para guardar ultima posición del dragable
+    nuevoMarcador.on('dragend', () => {
+      this.guardarMarcadoresLocalStorage();
+    });
 
     this.guardarMarcadoresLocalStorage();
+
   }
+
+
 
   irAMarcador( marcador : mapboxgl.Marker ){
     this.mapa.flyTo({
@@ -135,10 +143,22 @@ export class MarcadoresComponent implements AfterViewInit {
         color: m.color
       });
 
+      //Evento para guardar ultima posición del dragable
+      newMarker.on('dragend', () => {
+        this.guardarMarcadoresLocalStorage();
+      });
+
     });
 
   }
+  borrarMarcador( index : number ){
+    //removemos el marcador del mapa
+    this.marcadores[ index ].marker?.remove();
 
+    //eliminamos el marcador 
+    this.marcadores.splice( index, 1 );
+    this.guardarMarcadoresLocalStorage();
+  }
 
 
   
